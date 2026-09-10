@@ -1,7 +1,7 @@
 FROM		debian:bookworm
 
-RUN		yes | ( apt upgrade && \
-		apt update)
+RUN		yes | (apt-get update && \
+			apt-get upgrade)
 
 RUN		apt-get install mariadb-server -y
 

@@ -4,7 +4,17 @@ networks:
 
 volumes:
   mariadb:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/jsantini/data/mariadb
   wordpress:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/jsantini/data/wordpress
 
 
 services:

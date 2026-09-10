@@ -1,18 +1,18 @@
 FROM debian:bookworm
 
-RUN	yes | ( apt upgrade && \
-	apt update && \
-	apt install nginx && \
-	apt install vim && \
-	apt install curl)
+RUN	yes | (apt-get update && \
+	apt-get upgrade && \
+	apt-get install nginx)
 
 RUN	mkdir -p /etc/nginx/ssl && \
-	(yes | apt install openssl)
+	(yes | apt-get install openssl)
+
+RUN	rm -rf /var/lib/apt/lists/*
 
 RUN	openssl req -x509 -nodes \
 	-out /etc/nginx/ssl/inception.crt \
 	-keyout /etc/nginx/ssl/inception.key \
-	-subj "/C=FR/ST=IDF/L=PARIS/O=42/OU=42/CN=login.42.fr/UID=login"
+	-subj "/C=FR/ST=IDF/L=PARIS/O=42/OU=42/CN=jsantini.42.fr/UID=jsantini"
 
 RUN	mkdir -p /var/run/nginx
 

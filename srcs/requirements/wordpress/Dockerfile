@@ -14,7 +14,7 @@ RUN		wget https://fr.wordpress.org/wordpress-6.0-fr_FR.tar.gz -P /var/www
 
 RUN		cd /var/www && tar -xzf wordpress-6.0-fr_FR.tar.gz && rm wordpress-6.0-fr_FR.tar.gz
 
-RUN		chown -R root:root /var/www/wordpress
+RUN		chown -R www-data:www-data /var/www/wordpress
 
 COPY		./conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 

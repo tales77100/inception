@@ -2,6 +2,8 @@ until mariadb -h mariadb -u"$SQL_USER" -p"$SQL_PASSWORD" -e "SELECT 1"; do
     sleep 2
 done
 
+sleep 5
+
 mkdir -p /run/php
 
 if  [ ! -f /var/www/wordpress/wp-config.php ]; then
