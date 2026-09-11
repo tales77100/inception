@@ -1,8 +1,4 @@
-until mariadb -h mariadb -u"$SQL_USER" -p"$SQL_PASSWORD" -e "SELECT 1"; do
-    sleep 2
-done
-
-sleep 5
+sleep 15
 
 mkdir -p /run/php
 
