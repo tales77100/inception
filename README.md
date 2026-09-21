@@ -389,5 +389,3 @@ debugging commands and configuration errors;
 improving documentation structure and explanations;
 
 reviewing shell commands and Makefile logic.
-
-The final project configuration, source files, commands, and architecture were reviewed and adapted manually to match the requirements of the 42 Inception subject.
