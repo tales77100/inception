@@ -483,25 +483,3 @@ curl -kI https://jsantini.42.fr
 
 
 A working installation should return an HTTP response from NGINX/WordPress.
-
-# AI Usage During Development
-
-AI tools were used as a development and learning aid for:
-
-understanding Docker concepts;
-
-understanding Docker Compose service configuration;
-
-troubleshooting networking and service connectivity;
-
-debugging NGINX and PHP-FPM configuration;
-
-understanding WordPress/MariaDB configuration;
-
-reviewing Makefile commands;
-
-troubleshooting Docker commands;
-
-improving documentation.
-
-AI-generated suggestions were checked against the actual project environment and adapted manually when necessary.
