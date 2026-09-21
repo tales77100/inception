@@ -1,27 +1,27 @@
-Developer Documentation
-1. Development Environment
+# Developer Documentation
+## Development Environment
 
 This project is a Docker-based infrastructure composed of:
 
-NGINX;
+- NGINX;
 
-WordPress;
+- WordPress;
 
-PHP-FPM;
+- PHP-FPM;
 
-MariaDB;
+- MariaDB;
 
-Docker Compose;
+- Docker Compose;
 
-a dedicated Docker bridge network;
+- a dedicated Docker bridge network;
 
-persistent storage volumes;
+- persistent storage volumes;
 
-TLS certificates.
+- TLS certificates.
 
 The project is designed to run on a Linux environment.
 
-2. Prerequisites
+## Prerequisites
 
 Install the following tools:
 
@@ -35,7 +35,7 @@ The Docker daemon must be running.
 
 The developer must also have sufficient permissions to run Docker commands.
 
-3. Repository Structure
+## Repository Structure
 
 The project follows a structure similar to:
 
@@ -60,7 +60,7 @@ The project follows a structure similar to:
 
 The exact contents of the service directories depend on the implementation.
 
-4. Docker Compose
+## Docker Compose
 
 The main Compose file is:
 
@@ -78,13 +78,13 @@ The services share the Docker network:
 
 srcs_inception
 
-MariaDB
+### MariaDB
 
 MariaDB provides the database used by WordPress.
 
 The database service exposes port 3306 only inside the Docker network.
 
-WordPress
+### WordPress
 
 WordPress runs PHP through PHP-FPM.
 
@@ -95,7 +95,7 @@ PHP-FPM listens on:
 
 This port is exposed to the Docker network but is not published directly to the host.
 
-NGINX
+### NGINX
 
 NGINX is the public-facing service.
 
@@ -108,7 +108,7 @@ NGINX communicates with WordPress through:
 
 wordpress:9000
 
-5. Configuration
+## Configuration
 
 The infrastructure uses configuration variables for the domain, database and WordPress installation.
 
@@ -136,7 +136,7 @@ Passwords should not be committed to a public Git repository.
 
 For a production environment, sensitive values should preferably be provided through a dedicated secrets-management mechanism.
 
-6. Domain Configuration
+# Domain Configuration
 
 The project uses:
 
@@ -157,7 +157,7 @@ can be added to:
 
 The actual IP address should match the machine hosting the Docker infrastructure.
 
-7. Building the Project
+# Building the Project
 
 The recommended Makefile command is:
 
@@ -173,35 +173,35 @@ To build and start everything:
 
 docker compose -f ./srcs/docker-compose.yml up -d --build
 
-8. Makefile Commands
+# Makefile Commands
 
 The Makefile provides the main project lifecycle commands.
 
-Start
+## Start
 make
 
 
 Builds and starts the Docker infrastructure.
 
-Clean
+## Clean
 make clean
 
 
 Stops and removes the Compose infrastructure according to the Makefile configuration.
 
-Full cleanup
+## Full cleanup
 make fclean
 
 
 Performs the project's complete Docker cleanup procedure.
 
-Rebuild
+## Rebuild
 make re
 
 
 Performs a cleanup followed by a fresh build and start.
 
-9. Container Management
+# Container Management
 
 List running containers:
 
@@ -241,7 +241,7 @@ docker compose -f ./srcs/docker-compose.yml exec nginx sh
 docker compose -f ./srcs/docker-compose.yml exec wordpress sh
 docker compose -f ./srcs/docker-compose.yml exec mariadb sh
 
-10. Network Management
+# Network Management
 
 List Docker networks:
 
@@ -262,7 +262,7 @@ For example:
 wordpress -> mariadb
 nginx     -> wordpress
 
-11. Volumes and Persistence
+# Volumes and Persistence
 
 The project uses persistent storage for both the database and WordPress files.
 
@@ -271,7 +271,7 @@ The Compose configuration defines:
 mariadb
 wordpress
 
-MariaDB volume
+## MariaDB volume
 
 The volume is mounted at:
 
@@ -280,9 +280,9 @@ The volume is mounted at:
 
 and uses the host directory:
 
-/home/<login>/data/mariadb
+/home/jsantini/data/mariadb
 
-WordPress volume
+## WordPress volume
 
 The volume is mounted at:
 
@@ -291,7 +291,7 @@ The volume is mounted at:
 
 and uses the host directory:
 
-/home/<login>/data/wordpress
+/home/jsantini/data/wordpress
 
 
 List volumes:
@@ -307,7 +307,7 @@ docker volume inspect srcs_wordpress
 
 The persistent data should not be deleted during normal development unless a completely fresh installation is required.
 
-12. NGINX Development
+# NGINX Development
 
 The active NGINX configuration can be inspected with:
 
@@ -333,7 +333,7 @@ location ~ \.php$ {
     fastcgi_pass wordpress:9000;
 }
 
-13. WordPress Development
+# WordPress Development
 
 The WordPress installation is located inside the container at:
 
@@ -352,7 +352,7 @@ mariadb:3306
 
 This uses the Docker service name instead of an IP address.
 
-14. MariaDB Development
+# MariaDB Development
 
 From the WordPress container, the database can be tested using the MariaDB client:
 
@@ -366,9 +366,9 @@ docker compose -f ./srcs/docker-compose.yml logs mariadb
 
 The database is stored persistently under:
 
-/home/<login>/data/mariadb
+/home/jsantini/data/mariadb
 
-15. Service Connectivity
+# Service Connectivity
 
 The expected communication paths are:
 
@@ -398,7 +398,7 @@ From WordPress:
 
 docker compose -f ./srcs/docker-compose.yml exec wordpress getent hosts mariadb
 
-16. Testing
+# Testing
 
 Test NGINX configuration:
 
@@ -422,7 +422,7 @@ docker compose -f ./srcs/docker-compose.yml config
 
 This is useful for detecting incorrect YAML, environment variables, networks, volumes and service definitions.
 
-17. Rebuilding After Changes
+# Rebuilding After Changes
 
 After modifying a Dockerfile or build configuration:
 
@@ -438,74 +438,51 @@ Then start the services:
 
 docker compose -f ./srcs/docker-compose.yml up -d
 
-18. Persistent Data and Fresh Installation
+# Persistent Data and Fresh Installation
 
 The containers are disposable, while the WordPress and MariaDB data are persistent.
 
 Removing and recreating containers should not normally remove:
 
-/home/<login>/data/wordpress
-/home/<login>/data/mariadb
+/home/jsantini/data/wordpress
+/home/jsantini/data/mariadb
 
 
 A fresh installation requires removing the persistent data as well.
 
 This must be done carefully because deleting these directories permanently removes the stored WordPress files and MariaDB database.
 
-19. Debugging Checklist
+# Debugging Checklist
 
 When the website does not work, check the stack from the outside toward the database:
 
-Step 1: Containers
+## Step 1: Containers
 docker compose -f ./srcs/docker-compose.yml ps
 
-Step 2: Logs
+## Step 2: Logs
 docker compose -f ./srcs/docker-compose.yml logs
 
-Step 3: NGINX configuration
+## Step 3: NGINX configuration
 docker compose -f ./srcs/docker-compose.yml exec nginx nginx -t
 
-Step 4: Docker DNS
+## Step 4: Docker DNS
 docker compose -f ./srcs/docker-compose.yml exec nginx getent hosts wordpress
 
 docker compose -f ./srcs/docker-compose.yml exec wordpress getent hosts mariadb
 
-Step 5: WordPress database configuration
+## Step 5: WordPress database configuration
 docker compose -f ./srcs/docker-compose.yml exec wordpress grep -E 'DB_(NAME|USER|HOST)' /var/www/wordpress/wp-config.php
 
-Step 6: Database connectivity
+## Step 6: Database connectivity
 docker compose -f ./srcs/docker-compose.yml exec wordpress mariadb -h mariadb -uuser -p
 
-Step 7: HTTPS
+## Step 7: HTTPS
 curl -kI https://jsantini.42.fr
 
 
 A working installation should return an HTTP response from NGINX/WordPress.
 
-20. Security Considerations
-
-Do not commit sensitive credentials to Git.
-
-Avoid exposing MariaDB or PHP-FPM directly on the host.
-
-The architecture intentionally exposes only:
-
-443 -> NGINX
-
-
-while:
-
-3306 -> MariaDB
-9000 -> PHP-FPM
-
-
-remain internal to the Docker network.
-
-TLS is enabled in NGINX using the project's certificate and key.
-
-For production deployments, credentials should be managed using secrets rather than plain environment variables, and certificates should be issued by a trusted certificate authority.
-
-21. AI Usage During Development
+# AI Usage During Development
 
 AI tools were used as a development and learning aid for:
 
@@ -525,4 +502,4 @@ troubleshooting Docker commands;
 
 improving documentation.
 
-AI-generated suggestions were checked against the actual project environment and adapted manually where necessary.
+AI-generated suggestions were checked against the actual project environment and adapted manually when necessary.
