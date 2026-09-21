@@ -1,26 +1,26 @@
-This project has been created as part of the 42 curriculum by <login>.
+This project has been created as part of the 42 curriculum by *jsantini*.
 
-Inception
-Description
+# Inception
+## Description
 
-Inception is a system administration and Docker project from the 42 curriculum.
+- Inception is a system administration and Docker project from the 42 curriculum.
 
 The goal of the project is to build a small infrastructure composed of several Docker containers, each running a specific service. The infrastructure is orchestrated with Docker Compose and provides a complete WordPress website served through an NGINX web server and connected to a MariaDB database.
 
 The stack is composed of three main services:
 
-NGINX: acts as the web server and reverse proxy. It handles HTTPS connections using TLS 1.2/1.3 and forwards PHP requests to WordPress.
+- NGINX: acts as the web server and reverse proxy. It handles HTTPS connections using TLS 1.2/1.3 and forwards PHP requests to WordPress.
 
-WordPress + PHP-FPM: provides the website and its administration interface.
+- WordPress + PHP-FPM: provides the website and its administration interface.
 
-MariaDB: stores the WordPress database.
+- MariaDB: stores the WordPress database.
 
 The services communicate through a dedicated Docker bridge network.
 
 The project also uses persistent Docker volumes so that WordPress files and MariaDB data remain available when containers are stopped or recreated.
 
-Project Description
-Docker architecture
+# Project Description
+## Docker architecture
 
 The project uses Docker to isolate each service into its own container.
 
@@ -54,30 +54,30 @@ The architecture is:
 
 Only NGINX exposes a port to the host:
 
-Host 443 -> NGINX 443
+`Host 443 -> NGINX 443`
 
 
 WordPress PHP-FPM and MariaDB are only accessible through the Docker network.
 
-Main design choices
+## Main design choices
 
 The project follows a multi-container architecture where each container has a single main responsibility.
 
-NGINX handles HTTPS and web requests.
+- NGINX handles HTTPS and web requests.
 
-WordPress handles PHP execution and the CMS.
+- WordPress handles PHP execution and the CMS.
 
-MariaDB handles persistent database storage.
+- MariaDB handles persistent database storage.
 
-Docker Compose manages the complete application stack.
+- Docker Compose manages the complete application stack.
 
-A private Docker bridge network allows containers to communicate by service name.
+- A private Docker bridge network allows containers to communicate by service name.
 
-Docker volumes provide persistent storage.
+- Docker volumes provide persistent storage.
 
-TLS certificates are used to serve the website over HTTPS.
+- TLS certificates are used to serve the website over HTTPS.
 
-Virtual Machines vs Docker
+## Virtual Machines vs Docker
 Virtual Machines	Docker
 Virtualizes an entire operating system	Uses containers sharing the host kernel
 Usually requires more memory and storage	Lightweight compared with full VMs
@@ -87,7 +87,7 @@ Stronger isolation at the OS level	Process-level isolation
 
 For this project, Docker is appropriate because the objective is to isolate individual services without requiring a complete virtual machine for each service.
 
-Secrets vs Environment Variables
+## Secrets vs Environment Variables
 
 Environment variables are convenient for configuration values such as database names, usernames, and domain names.
 
@@ -99,7 +99,7 @@ Docker secrets provide a more appropriate mechanism for sensitive values because
 
 For this project, environment variables are used by the initialization scripts to configure the services. In a production environment, sensitive passwords should preferably be managed using a dedicated secret-management mechanism.
 
-Docker Network vs Host Network
+## Docker Network vs Host Network
 
 A Docker bridge network provides an isolated virtual network for the containers.
 
@@ -113,7 +113,7 @@ The host network would remove much of this network isolation and make containers
 
 The Docker bridge network is therefore appropriate for this architecture because only NGINX needs to be reachable from the host.
 
-Docker Volumes vs Bind Mounts
+## Docker Volumes vs Bind Mounts
 
 Docker volumes are managed by Docker and are designed to persist container data independently from the container lifecycle.
 
@@ -125,8 +125,8 @@ This project uses volumes for:
 
 The configured volumes are backed by host directories:
 
-/home/<login>/data/mariadb
-/home/<login>/data/wordpress
+/home/jsantini/data/mariadb
+/home/jsantini/data/wordpress
 
 
 This allows the project data to persist when containers are recreated.
@@ -135,24 +135,24 @@ A bind mount directly maps an explicit host path into a container. It provides d
 
 Docker-managed volumes are generally easier to manage through Docker, while bind mounts are useful when direct access to host files is required.
 
-Services
-NGINX
+# Services
+## NGINX
 
 NGINX is the public entry point of the infrastructure.
 
 It:
 
-listens on port 443;
+- listens on port 443;
 
-provides HTTPS;
+- provides HTTPS;
 
-uses TLS 1.2 and TLS 1.3;
+- uses TLS 1.2 and TLS 1.3;
 
-serves the WordPress files;
+- serves the WordPress files;
 
-forwards PHP requests to WordPress PHP-FPM.
+- forwards PHP requests to WordPress PHP-FPM.
 
-WordPress
+## WordPress
 
 WordPress provides the CMS and website.
 
@@ -163,7 +163,7 @@ PHP-FPM listens internally on:
 
 It is not exposed directly to the host.
 
-MariaDB
+# MariaDB
 
 MariaDB provides the relational database used by WordPress.
 
@@ -174,20 +174,20 @@ It listens internally on:
 
 It is not published on the host.
 
-Instructions
-Prerequisites
+# Instructions
+## Prerequisites
 
 The project requires:
 
-Linux environment;
+- Linux environment;
 
-Docker;
+- Docker;
 
-Docker Compose;
+- Docker Compose;
 
-GNU Make;
+- GNU Make;
 
-Git.
+- Git.
 
 Verify Docker:
 
@@ -195,7 +195,7 @@ docker --version
 docker compose version
 make --version
 
-Configuration
+## Configuration
 
 The project uses environment variables for configuration.
 
@@ -226,7 +226,7 @@ For a local setup, /etc/hosts can contain:
 
 127.0.0.1 jsantini.42.fr
 
-Build and start
+# Build and start
 
 From the repository root:
 
@@ -239,7 +239,7 @@ The project can also be started directly with:
 
 docker compose -f ./srcs/docker-compose.yml up -d --build
 
-Check the containers
+## Check the containers
 docker compose -f ./srcs/docker-compose.yml ps
 
 
@@ -249,7 +249,7 @@ mariadb
 wordpress
 nginx
 
-Access the website
+## Access the website
 
 Open:
 
@@ -258,7 +258,7 @@ https://jsantini.42.fr
 
 Because the project uses a local/self-signed certificate, the browser may display a certificate warning.
 
-Access WordPress administration
+## Access WordPress administration
 
 The administration interface is available at:
 
@@ -267,7 +267,7 @@ https://jsantini.42.fr/wp-admin/
 
 Use the WordPress administrator credentials configured for the project.
 
-Stop the project
+## Stop the project
 
 To stop the containers:
 
@@ -278,7 +278,7 @@ To stop and remove the containers:
 
 docker compose -f ./srcs/docker-compose.yml down
 
-Remove containers and volumes
+## Remove containers and volumes
 
 The clean target removes the Compose containers and volumes:
 
@@ -287,19 +287,19 @@ make clean
 
 Be careful: removing volumes can remove persistent Docker data depending on the configuration.
 
-Full cleanup
+## Full cleanup
 make fclean
 
 
 This also performs Docker system cleanup.
 
-Rebuild from scratch
+## Rebuild from scratch
 make re
 
 
 This removes the existing infrastructure and rebuilds it.
 
-Useful commands
+## Useful commands
 
 View logs:
 
@@ -330,20 +330,20 @@ A successful configuration should return an HTTP response such as:
 
 HTTP/1.1 200 OK
 
-Data Persistence
+# Data Persistence
 
 The project uses two persistent volumes.
 
-MariaDB
-/home/<login>/data/mariadb
+## MariaDB
+/home/jsantini/data/mariadb
 
 
 mounted inside the MariaDB container as:
 
 /var/lib/mysql
 
-WordPress
-/home/<login>/data/wordpress
+## WordPress
+/home/jsantini/data/wordpress
 
 
 mounted inside the WordPress container as:
@@ -353,24 +353,24 @@ mounted inside the WordPress container as:
 
 Therefore, recreating the containers does not necessarily remove the website and database data.
 
-Resources
-Official documentation
+# Resources
+## Official documentation
 
-Docker documentation: https://docs.docker.com/
+- Docker documentation: https://docs.docker.com/
 
-Docker Compose documentation: https://docs.docker.com/compose/
+- Docker Compose documentation: https://docs.docker.com/compose/
 
-NGINX documentation: https://nginx.org/en/docs/
+- NGINX documentation: https://nginx.org/en/docs/
 
-WordPress documentation: https://developer.wordpress.org/
+- WordPress documentation: https://developer.wordpress.org/
 
-MariaDB documentation: https://mariadb.com/docs/
+- MariaDB documentation: https://mariadb.com/docs/
 
-PHP-FPM documentation: https://www.php.net/manual/en/install.fpm.php
+- PHP-FPM documentation: https://www.php.net/manual/en/install.fpm.php
 
-TLS documentation: https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security
+- TLS documentation: https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security
 
-AI usage
+# AI usage
 
 AI tools were used as a learning and assistance resource during the development of this project.
 
@@ -391,31 +391,3 @@ improving documentation structure and explanations;
 reviewing shell commands and Makefile logic.
 
 The final project configuration, source files, commands, and architecture were reviewed and adapted manually to match the requirements of the 42 Inception subject.
-
-Project Structure
-
-A simplified project structure is:
-
-.
-├── Makefile
-├── README.md
-├── USER_DOC.md
-├── DEV_DOC.md
-└── srcs
-    ├── docker-compose.yml
-    └── requirements
-        ├── mariadb
-        ├── nginx
-        └── wordpress
-
-
-Each service has its own Dockerfile and configuration files.
-
-Makefile
-
-The main Makefile targets are:
-
-make        Build and start the infrastructure
-make clean  Stop and remove containers and volumes
-make fclean Clean Docker resources
-make re     Rebuild the complete infrastructure
