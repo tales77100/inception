@@ -39,6 +39,7 @@ The developer must also have sufficient permissions to run Docker commands.
 
 The project follows a structure similar to:
 
+`
 .
 ├── Makefile
 ├── README.md
@@ -56,6 +57,7 @@ The project follows a structure similar to:
         └── wordpress
             ├── Dockerfile
             └── ...
+`
 
 
 The exact contents of the service directories depend on the implementation.
