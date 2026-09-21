@@ -10,9 +10,9 @@ RUN	 	apt-get install -y	php8.2		\
 			php8.2-mysql	\
 			mariadb-client
 
-RUN		wget https://fr.wordpress.org/wordpress-6.0-fr_FR.tar.gz -P /var/www
+RUN		wget https://fr.wordpress.org/wordpress-7.1-fr_FR.tar.gz -P /var/www
 
-RUN		cd /var/www && tar -xzf wordpress-6.0-fr_FR.tar.gz && rm wordpress-6.0-fr_FR.tar.gz
+RUN		cd /var/www && tar -xzf wordpress-7.1-fr_FR.tar.gz && rm wordpress-7.1-fr_FR.tar.gz
 
 RUN		chown -R www-data:www-data /var/www/wordpress
 

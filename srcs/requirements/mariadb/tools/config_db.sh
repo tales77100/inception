@@ -14,9 +14,6 @@ until mysqladmin ping --silent; do
     sleep 2
 done
 
-
-wait $pid
-
 if [ ! -f /var/lib/mysql/.initialized ]; then
     mysql <<EOF
 CREATE DATABASE IF NOT EXISTS \`${SQL_DATABASE}\`;
@@ -29,7 +26,10 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY '${SQL_ROOT_PASSWORD}';
 
 FLUSH PRIVILEGES;
 EOF
+
     touch /var/lib/mysql/.initialized
 fi
+
+mysqladmin -u root -p"${SQL_ROOT_PASSWORD}" shutdown
 
 exec mysqld_safe --datadir=/var/lib/mysql

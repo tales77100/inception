@@ -1,4 +1,4 @@
-sleep 15
+sleep 25
 
 mkdir -p /run/php
 
